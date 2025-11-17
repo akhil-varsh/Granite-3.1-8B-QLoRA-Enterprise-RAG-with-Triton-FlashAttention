@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: enterprise-rag
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-storage
+  namespace: enterprise-rag
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-inference
+  namespace: enterprise-rag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rag-inference
+  template:
+    metadata:
+      labels:
+        app: rag-inference
+    spec:
+      containers:
+      - name: rag-server
+        image: enterprise-rag-llama3:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: vllm
+        - containerPort: 8080
+          name: fastapi
+        - containerPort: 7860
+          name: gradio
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: 32Gi
+            cpu: 8
+          requests:
+            nvidia.com/gpu: 1
+            memory: 24Gi
+            cpu: 4
+        volumeMounts:
+        - name: model-storage
+          mountPath: /workspace/models
+        env:
+        - name: CUDA_VISIBLE_DEVICES
+          value: "0"
+        - name: HF_HOME
+          value: /workspace/models
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: model-storage
+      nodeSelector:
+        accelerator: nvidia-gpu
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rag-service
+  namespace: enterprise-rag
+spec:
+  type: LoadBalancer
+  selector:
+    app: rag-inference
+  ports:
+  - name: vllm
+    port: 8000
+    targetPort: 8000
+  - name: fastapi
+    port: 8080
+    targetPort: 8080
+  - name: gradio
+    port: 7860
+    targetPort: 7860
