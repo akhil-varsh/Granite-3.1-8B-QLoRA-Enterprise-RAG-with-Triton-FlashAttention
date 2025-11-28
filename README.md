@@ -576,14 +576,5 @@ If you find this project useful, please consider giving it a ⭐!
 
 ---
 
-## 📞 Contact
-
-- GitHub Issues: [Issues](https://github.com/yourusername/Enterprise-RAG-Llama3-QLORA-Triton/issues)
-- Email: your.email@example.com
-
----
-
 **Built with ❤️ for the AI community**
 
-*Last updated: November 2025*
-"# Granite-3.1-8B-QLoRA-Enterprise-RAG-with-Triton-FlashAttention" 
