@@ -1,8 +1,3 @@
-"""
-vLLM Inference Server with Custom Triton FlashAttention Kernel
-High-performance inference server achieving 100+ tokens/sec on RTX 4090
-"""
-
 import os
 import sys
 from pathlib import Path
@@ -67,7 +62,7 @@ class VLLMServer:
             dtype="bfloat16",
         )
         
-        logger.info("✅ vLLM server initialized")
+        logger.info(" vLLM server initialized")
     
     def _patch_attention(self):
         """Patch vLLM to use custom Triton kernel"""
@@ -80,11 +75,11 @@ class VLLMServer:
             # modifying vLLM's attention implementation
             # For production, you'd integrate this into vLLM's attention layers
             
-            logger.info("⚠️ Note: Custom kernel integration requires vLLM modification")
+            logger.info(" Note: Custom kernel integration requires vLLM modification")
             logger.info("   See triton_kernels/flash_attention.py for kernel implementation")
             
         except Exception as e:
-            logger.warning(f"⚠️ Could not patch attention: {e}")
+            logger.warning(f"Could not patch attention: {e}")
             logger.warning("   Falling back to default vLLM attention")
     
     def generate(
@@ -205,12 +200,12 @@ class VLLMServer:
         tokens_per_sec = total_tokens / total_time
         latency_per_prompt = total_time / num_prompts
         
-        logger.info(f"\n📊 Benchmark Results:")
+        logger.info(f"\nBenchmark Results:")
         logger.info(f"   Total time: {total_time:.2f}s")
         logger.info(f"   Total tokens: {total_tokens}")
         logger.info(f"   Throughput: {tokens_per_sec:.2f} tokens/sec")
         logger.info(f"   Latency: {latency_per_prompt:.3f}s per prompt")
-        logger.info(f"   {'✅ PASSED' if tokens_per_sec > 100 else '❌ FAILED'} (target: 100+ tokens/sec)")
+        logger.info(f"   {' PASSED' if tokens_per_sec > 100 else '❌ FAILED'} (target: 100+ tokens/sec)")
         logger.info("="*60 + "\n")
         
         return {
