@@ -1,8 +1,3 @@
-"""
-FastAPI RAG Endpoint with Vector Database
-Enterprise RAG system with 200 documents and semantic search
-"""
-
 import os
 import sys
 from pathlib import Path
@@ -77,7 +72,7 @@ class VectorDatabase:
         if index_path and Path(index_path).exists():
             self.load_index(index_path)
         
-        logger.info(f"✅ Vector DB initialized (dimension: {self.dimension})")
+        logger.info(f" Vector DB initialized (dimension: {self.dimension})")
     
     def add_documents(self, documents: List[Dict]):
         """
@@ -109,7 +104,7 @@ class VectorDatabase:
         self.documents.extend(documents)
         self.doc_ids.extend([doc['id'] for doc in documents])
         
-        logger.info(f"✅ Added {len(documents)} documents (total: {len(self.documents)})")
+        logger.info(f" Added {len(documents)} documents (total: {len(self.documents)})")
     
     def search(self, query: str, top_k: int = 3) -> List[Dict]:
         """
@@ -153,7 +148,7 @@ class VectorDatabase:
         with open(output_dir / "documents.json", 'w', encoding='utf-8') as f:
             json.dump(self.documents, f, indent=2, ensure_ascii=False)
         
-        logger.info(f"✅ Saved index to {output_path}")
+        logger.info(f"Saved index to {output_path}")
     
     def load_index(self, index_path: str):
         """Load FAISS index and documents"""
@@ -168,7 +163,7 @@ class VectorDatabase:
         
         self.doc_ids = [doc['id'] for doc in self.documents]
         
-        logger.info(f"✅ Loaded index from {index_path} ({len(self.documents)} documents)")
+        logger.info(f"Loaded index from {index_path} ({len(self.documents)} documents)")
 
 
 class RAGSystem:
@@ -207,7 +202,7 @@ class RAGSystem:
             use_custom_kernel=True,
         )
         
-        logger.info("✅ RAG system initialized")
+        logger.info("RAG system initialized")
     
     def _load_documents(self, documents_path: str):
         """Load documents from path"""
@@ -248,7 +243,7 @@ class RAGSystem:
                 self.vector_db.add_documents(documents)
         
         else:
-            logger.warning(f"⚠️ No documents found at {documents_path}")
+            logger.warning(f"No documents found at {documents_path}")
     
     def query(
         self,
