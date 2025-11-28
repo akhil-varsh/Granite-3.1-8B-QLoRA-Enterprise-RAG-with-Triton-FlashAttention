@@ -1,15 +1,3 @@
-"""
-Custom Triton FlashAttention-2 Kernel
-Optimized attention implementation with tiling and on-chip memory management
-
-This kernel achieves >35% speedup over standard PyTorch attention by:
-1. Fusing operations (QK^T, softmax, dropout, matmul with V)
-2. Tiling to fit in SRAM (avoiding HBM round-trips)
-3. Online softmax computation (reduces memory bandwidth)
-4. Optimized memory access patterns
-
-Reference: FlashAttention-2 (Dao et al., 2023)
-"""
 
 import torch
 import triton
@@ -321,10 +309,10 @@ if __name__ == "__main__":
         
         # Test forward pass
         out = triton_flash_attention(q, k, v)
-        print(f"✅ Forward pass successful: {out.shape}")
+        print(f" Forward pass successful: {out.shape}")
         
         # Test v2
         out_v2 = triton_flash_attention_v2(q, k, v)
-        print(f"✅ Optimized version successful: {out_v2.shape}")
+        print(f"Optimized version successful: {out_v2.shape}")
     else:
-        print("⚠️ CUDA not available, skipping test")
+        print("CUDA not available, skipping test")
