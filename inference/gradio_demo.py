@@ -1,8 +1,3 @@
-"""
-Gradio Demo Interface for Enterprise RAG System
-Interactive web interface for testing the RAG system
-"""
-
 import os
 import sys
 from pathlib import Path
@@ -37,7 +32,7 @@ class GradioRAGDemo:
             index_path=index_path,
         )
         
-        logger.info("✅ Gradio demo initialized")
+        logger.info("Gradio demo initialized")
     
     def query_rag(
         self,
@@ -87,7 +82,7 @@ class GradioRAGDemo:
         
         except Exception as e:
             logger.error(f"Error processing query: {e}")
-            return f"❌ Error: {str(e)}", ""
+            return f"Error: {str(e)}", ""
     
     def launch(self, share: bool = False, server_port: int = 7860):
         """Launch Gradio interface"""
